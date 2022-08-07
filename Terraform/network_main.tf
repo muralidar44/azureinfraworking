@@ -23,7 +23,7 @@ resource "azurerm_public_ip" "lbpublicip" {
 }
 
  resource "azurerm_lb" "medialb" {
-   name                = [var.medialbname]
+   name                = "$(var.medialbname)"
    location            = azurerm_resource_group.mediarg.location
    resource_group_name = azurerm_resource_group.mediarg.name
 
@@ -35,7 +35,7 @@ resource "azurerm_public_ip" "lbpublicip" {
 
  resource "azurerm_lb_backend_address_pool" "lbbp" {
    loadbalancer_id     = azurerm_lb.medialb.id
-   name                = var.lbbackendpoolname
+   name                = "$(var.lbbackendpoolname)"
  }
 
  resource "azurerm_network_interface" "webappnics" {
