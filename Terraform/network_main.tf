@@ -80,5 +80,5 @@ resource "azurerm_lb_probe" "lbprobe" {
 
 
 output "mediapplb" {
-  value = azurerm_lb.mediapplb
+  value = azurerm_lb.mediaapplb
 }
