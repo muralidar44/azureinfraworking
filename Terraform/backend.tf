@@ -10,6 +10,6 @@
   }
 }
 # Configure the Azure provider
-provider "azurerm" { 
+ provider "azurerm" { 
   environment = "public"
 }
