@@ -41,15 +41,15 @@ resource "azurerm_virtual_machine_scale_set" "appvmss" {
   # required when using rolling upgrade policy
   health_probe_id = azurerm_lb_probe.example.id
 
-   storage_image_reference {
+   storage_profile_image_reference {
      publisher = var.webvm_image_publisher
      offer     = var.webvm_image_offer
      sku       = var.rhel_8_2_sku
      version   = "latest"
    }
 
-   storage_os_disk {
-     name              = "myosdisk${count.index}"
+   storage_profile_os_disk {
+     name              = ""
      caching           = "ReadWrite"
      create_option     = "FromImage"
      managed_disk_type = "Standard_LRS"
@@ -57,7 +57,7 @@ resource "azurerm_virtual_machine_scale_set" "appvmss" {
 
    
    os_profile {
-  count                 = 2
+  
   computer_name  = "webvmcomputer${count.index}"
   admin_username = var.linux_admin_username
   admin_password = random_password.linux-vm-password.result
@@ -66,6 +66,7 @@ resource "azurerm_virtual_machine_scale_set" "appvmss" {
    os_profile_linux_config {
      disable_password_authentication = false
    }
+
 
    tags = {
      environment = "staging"
