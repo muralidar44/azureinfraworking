@@ -1,19 +1,6 @@
-variable "webvm_image_publisher" {
-  type        = string
-  description = "Virtual machine source image publisher"
-}
-
 variable "dbvmstaticip" {
   type        = string
   description = "db vm static ip"
-}
-variable "webvm_image_offer" {
-  type        = string
-  description = "Virtual machine source image offer"
-}
-variable "rhel_8_2_sku" {
-  type        = string
-  description = "SKU for RHEL 8.2"
 }
 
 variable "vmsku" {
