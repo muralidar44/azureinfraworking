@@ -38,7 +38,7 @@ resource "azurerm_public_ip" "lbpublicip" {
    name                = "$(var.lbbackendpoolname)"
  }
 
- resource "azurerm_network_interface" "webappnics" {
+ resource "azurerm_network_interface" "webvmnics" {
    count               = 2
    name                = "webnic${count.index}"
    location            = azurerm_resource_group.mediarg.location
