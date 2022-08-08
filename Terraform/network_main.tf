@@ -6,10 +6,18 @@ resource "azurerm_virtual_network" "mediavnet" {
   resource_group_name = azurerm_resource_group.mediarg.name
 }
 
-# Create a subnet for VM
-resource "azurerm_subnet" "websubnet" {
-  name 					= [var.mediawebsubnet]
-  address_prefixes 		= [var.mediawebsubnetcidr]
+# Create a subnet for VMSS appservers
+resource "azurerm_subnet" "appvmsubnet" {
+  name 					= var.mediaappsubnet
+  address_prefixes 		= [var.mediaappsubnetcidr]
+  resource_group_name   = azurerm_resource_group.mediarg.name
+  virtual_network_name = azurerm_virtual_network.mediavnet.name
+}
+
+# Create a subnet for DB VM
+resource "azurerm_subnet" "dbvmsubnet" {
+  name 					= var.mediadbsubnet
+  address_prefixes 		= [var.mediadbsubnetcidr]
   resource_group_name   = azurerm_resource_group.mediarg.name
   virtual_network_name = azurerm_virtual_network.mediavnet.name
 }
@@ -22,8 +30,8 @@ resource "azurerm_public_ip" "lbpublicip" {
    allocation_method            = "Static"
 }
 
- resource "azurerm_lb" "medialb" {
-   name                = "$(var.medialbname)"
+ resource "azurerm_lb" "mediaapplb" {
+   name                = var.mediaapplbname
    location            = azurerm_resource_group.mediarg.location
    resource_group_name = azurerm_resource_group.mediarg.name
 
@@ -33,15 +41,15 @@ resource "azurerm_public_ip" "lbpublicip" {
    }
  }
 
- resource "azurerm_lb_backend_address_pool" "lbbp" {
-   loadbalancer_id     = azurerm_lb.medialb.id
-   name                = "$(var.lbbackendpoolname)"
+ resource "azurerm_lb_backend_address_pool" "lbappbp" {
+   loadbalancer_id     = azurerm_lb.mediaapplb.id
+   name                = var.lbappbpname
  }
 
  resource "azurerm_lb_nat_pool" "lbnatpool" {
   resource_group_name            = azurerm_resource_group.mediarg.name
   name                           = "ssh"
-  loadbalancer_id                = azurerm_lb.medialb.id
+  loadbalancer_id                = azurerm_lb.mediaapplb.id
   protocol                       = "Tcp"
   frontend_port_start            = 50000
   frontend_port_end              = 50119
@@ -49,24 +57,36 @@ resource "azurerm_public_ip" "lbpublicip" {
   frontend_ip_configuration_name = "frontpubip"
 }
 
-resource "azurerm_lb_probe" "example" {
+resource "azurerm_lb_probe" "lbprobe" {
   resource_group_name = azurerm_resource_group.mediarg.name
-  loadbalancer_id     = azurerm_lb.medialb.id
+  loadbalancer_id     = azurerm_lb.mediaapplb.id
   name                = "http-probe"
   protocol            = "Http"
   request_path        = "/health"
   port                = 8080
 }
 
- resource "azurerm_network_interface" "webvmnics" {
-   count               = 2
-   name                = "webnic${count.index}"
+network_profile {
+    name    = "appvmnetworkprofile"
+    primary = true
+
+    ip_configuration {
+      name                                   = "appvmconfig"
+      primary                                = true
+      subnet_id                              = azurerm_subnet.appvmsubnet.id
+      load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.lbappbp.id]
+      load_balancer_inbound_nat_rules_ids    = [azurerm_lb_nat_pool.lbnatpool.id]
+    }
+  }
+
+ resource "azurerm_network_interface" "dbvmnic" {
+   name                = "dbvmnic"
    location            = azurerm_resource_group.mediarg.location
    resource_group_name = azurerm_resource_group.mediarg.name
 
    ip_configuration {
-     name                          = "vmnicconfig"
-     subnet_id                     = azurerm_subnet.websubnet.id
+     name                          = "dbvmcconfig"
+     subnet_id                     = azurerm_subnet.dbvmsubnet.id
      private_ip_address_allocation = "static"
    }
  }
