@@ -14,21 +14,7 @@ resource "random_password" "linux-vm-password" {
 }
 
 
- resource "azurerm_virtual_machine" "dbvm" {
-   count                 = 1
-   name                  = "dbvm${count.index}"
-   location              = azurerm_resource_group.mediarg.location
-   resource_group_name   = azurerm_resource_group.mediarg.name
-   network_interface_ids = [element(azurerm_network_interface.dbvmnic.*.id, count.index)]
-   vm_size               = "Standard_DS1_v2"
-
-   # Uncomment this line to delete the OS disk automatically when deleting the VM
-   delete_os_disk_on_termination = true
-
-   # Uncomment this line to delete the data disks automatically when deleting the VM
-   # delete_data_disks_on_termination = true
- }
-resource "azurerm_virtual_machine_scale_set" "appvmss" {
+ resource "azurerm_virtual_machine_scale_set" "appvmss" {
   name                = "appwebvmss"
   location            = azurerm_resource_group.mediarg.location
   resource_group_name = azurerm_resource_group.mediarg.name
