@@ -124,7 +124,3 @@ network_profile {
 output "appvmss" {
   value = azurerm_virtual_machine_scale_set.appvmss
 }
-
-output "applb" {
-  value = azurerm_lb.mediapplb
-}
