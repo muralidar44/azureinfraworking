@@ -66,18 +66,6 @@ resource "azurerm_lb_probe" "lbprobe" {
   port                = 8080
 }
 
-network_profile {
-    name    = "appvmnetworkprofile"
-    primary = true
-
-    ip_configuration {
-      name                                   = "appvmconfig"
-      primary                                = true
-      subnet_id                              = azurerm_subnet.appvmsubnet.id
-      load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.lbappbp.id]
-      load_balancer_inbound_nat_rules_ids    = [azurerm_lb_nat_pool.lbnatpool.id]
-    }
-  }
 
  resource "azurerm_network_interface" "dbvmnic" {
    name                = "dbvmnic"
