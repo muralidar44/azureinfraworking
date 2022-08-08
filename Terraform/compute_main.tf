@@ -14,11 +14,9 @@ resource "random_password" "linux-vm-password" {
 }
 
 
- resource "azurerm_virtual_machine" "webapp" {
-   count                 = 2
-   name                  = "webapp${count.index}"
+ resource "azurerm_virtual_machine" "dbvm" {
+   name                  = "dbvm"
    location              = azurerm_resource_group.mediarg.location
-   availability_set_id   = azurerm_availability_set.mediaavset.id
    resource_group_name   = azurerm_resource_group.mediarg.name
    network_interface_ids = [element(azurerm_network_interface.webappnics.*.id, count.index)]
    vm_size               = "Standard_DS1_v2"
