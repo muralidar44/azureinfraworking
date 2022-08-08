@@ -64,7 +64,7 @@ resource "azurerm_virtual_machine_scale_set" "appvmss" {
    
    os_profile {
   
-  computer_name  = "webvmcomputer${count.index}"
+  computer_name  = "appvm${count.index}"
   admin_username = var.linux_admin_username
   admin_password = random_password.linux-vm-password.result
    }
