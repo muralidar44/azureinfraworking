@@ -79,6 +79,6 @@ resource "azurerm_lb_probe" "lbprobe" {
 }
 
 
-output "applb" {
+output "mediapplb" {
   value = azurerm_lb.mediapplb
 }
