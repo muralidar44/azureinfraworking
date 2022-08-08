@@ -10,10 +10,7 @@ variable "rhel_8_2_sku" {
   type        = string
   description = "SKU for RHEL 8.2"
 }
-variable "mediaavsetname" {
-  type        = string
-  description = "availability set name"  
-}
+
 variable "vmsku" {
   type        = string
   description = "Virtual machine sku"
@@ -33,14 +30,24 @@ type = string
 description = "This is the mediawiki vnet"
 }
 
-variable "mediawebsubnetcidr" {
+variable "mediaappsubnet" {
 type = string
-description = "This is the mediawiki mediawebsubnet"
+description = "This is the mediawiki mediaappvmsubnet"
 }
 
-variable "mediawebsubnet" {
+variable "mediaappsubnetcidr" {
 type = string
-description = "This is the mediawiki mediawebsubnet"
+description = "This is the mediawiki appvm subnet cidr"
+}
+
+variable "mediadbsubnet" {
+type = string
+description = "This is the mediawiki dbvm subnet "
+}
+
+variable "mediadbsubnetcidr" {
+type = string
+description = "This is the mediawiki db vm cidr"
 }
 
 variable "lbpublicipname" {
@@ -48,12 +55,12 @@ type = string
 description = "This is the Load balancer public Ip Name"
 }
 
-variable "medialbname" {
+variable "mediaapplbname" {
 type = string
 description = "This is the Load balancer Name"
 }
 
-variable "lbbackendpoolname" {
+variable "lbappbpname" {
 type = string
 description = "This is the Load balancer backend pool name"
 }
