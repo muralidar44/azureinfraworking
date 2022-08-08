@@ -22,6 +22,18 @@ resource "azurerm_subnet" "dbvmsubnet" {
   virtual_network_name = azurerm_virtual_network.mediavnet.name
 }
 
+resource "azurerm_network_interface" "dbvmnic" {
+   name                = "dbvmnic"
+   location            = azurerm_resource_group.mediarg.location
+   resource_group_name = azurerm_resource_group.mediarg.name
+
+   ip_configuration {
+     name                          = "dbvmnicconfig"
+     subnet_id                     = azurerm_subnet.dbvmsubnet.id
+     private_ip_address_allocation = "static"
+   }
+ }
+
 # Get a Static Public IP
 resource "azurerm_public_ip" "lbpublicip" {
    name                         = var.lbpublicipname
