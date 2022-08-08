@@ -119,8 +119,10 @@ network_profile {
 
  output "dbvm" {
   value = azurerm_virtual_machine.dbvm
+  sensitive = true
 }
 
 output "appvmss" {
   value = azurerm_virtual_machine_scale_set.appvmss
+  sensitive = true
 }
