@@ -78,15 +78,3 @@ resource "azurerm_lb_probe" "lbprobe" {
   port                = 8080
 }
 
-
- resource "azurerm_network_interface" "dbvmnic" {
-   name                = "dbvmnic"
-   location            = azurerm_resource_group.mediarg.location
-   resource_group_name = azurerm_resource_group.mediarg.name
-
-   ip_configuration {
-     name                          = "dbvmcconfig"
-     subnet_id                     = azurerm_subnet.dbvmsubnet.id
-     private_ip_address_allocation = "static"
-   }
- }
