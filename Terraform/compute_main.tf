@@ -27,9 +27,9 @@ resource "azurerm_virtual_machine" "dbvm" {
    # Uncomment this line to delete the data disks automatically when deleting the VM
    # delete_data_disks_on_termination = true
    storage_image_reference {
-     publisher = "RedHat"
-     offer     = "RHEL"
-     sku       = "8.2"
+     publisher = "Canonical"
+     offer     = "UbuntuServer"
+     sku       = "18.04-LTS"
      version   = "latest"
    }
 
@@ -76,9 +76,9 @@ resource "azurerm_virtual_machine" "dbvm" {
   }
 
    storage_profile_image_reference {
-     publisher = var.webvm_image_publisher
-     offer     = var.webvm_image_offer
-     sku       = var.rhel_8_2_sku
+     publisher = "Canonical"
+     offer     = "UbuntuServer"
+     sku       = "18.04-LTS"
      version   = "latest"
    }
 
