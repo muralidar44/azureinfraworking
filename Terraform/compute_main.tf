@@ -13,7 +13,7 @@ resource "random_password" "linux-vm-password" {
   override_special = "!@#$%&"
 }
 
-resource "azurerm_availability_set" "mediaavset" {
+resource "azurerm_availability_set" "mediaavsetdb" {
    name                         = var.mediaavsetname
    location                     = azurerm_resource_group.mediarg.location
    resource_group_name          = azurerm_resource_group.mediarg.name
@@ -22,20 +22,24 @@ resource "azurerm_availability_set" "mediaavset" {
    managed                      = true
  }
 
- resource "azurerm_virtual_machine" "webapp" {
-   count                 = 2
-   name                  = "webvm${count.index}"
-   location              = azurerm_resource_group.mediarg.location
-   availability_set_id   = azurerm_availability_set.mediaavset.id
-   resource_group_name   = azurerm_resource_group.mediarg.name
-   network_interface_ids = [element(azurerm_network_interface.webvmnics.*.id, count.index)]
-   vm_size               = var.vmsku
+resource "azurerm_virtual_machine_scale_set" "appvmss" {
+  name                = "appwebvmss"
+  location            = azurerm_resource_group.mediarg.location
+  resource_group_name = azurerm_resource_group.mediarg.name
 
-   # Uncomment this line to delete the OS disk automatically when deleting the VM
-   delete_os_disk_on_termination = true
+  # automatic rolling upgrade
+  automatic_os_upgrade = true
+  upgrade_policy_mode  = "Rolling"
 
-   # Uncomment this line to delete the data disks automatically when deleting the VM
-   # delete_data_disks_on_termination = true
+  rolling_upgrade_policy {
+    max_batch_instance_percent              = 50
+    max_unhealthy_instance_percent          = 50
+    max_unhealthy_upgraded_instance_percent = 5
+    pause_time_between_batches              = "PT0S"
+  }
+
+  # required when using rolling upgrade policy
+  health_probe_id = azurerm_lb_probe.example.id
 
    storage_image_reference {
      publisher = var.webvm_image_publisher
