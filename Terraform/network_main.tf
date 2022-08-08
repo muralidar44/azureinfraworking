@@ -83,8 +83,8 @@ resource "azurerm_lb_rule" "applbrule" {
    loadbalancer_id                = azurerm_lb.mediaapplb.id
    name                           = "http"
    protocol                       = "Tcp"
-   frontend_port                  = 80
-   backend_port                   = 80
+   frontend_port                  = 8080
+   backend_port                   = 8080
    backend_address_pool_id        = azurerm_lb_backend_address_pool.lbappbp.id
    frontend_ip_configuration_name = "frontpubip"
    probe_id                       = azurerm_lb_probe.lbprobe.id
