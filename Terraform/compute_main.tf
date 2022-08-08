@@ -69,6 +69,11 @@ resource "azurerm_virtual_machine" "dbvm" {
 
   # required when using rolling upgrade policy
   health_probe_id = azurerm_lb_probe.lbprobe.id
+    sku {
+    name     = "Standard_F2"
+    tier     = "Standard"
+    capacity = 2
+  }
 
    storage_profile_image_reference {
      publisher = var.webvm_image_publisher
@@ -84,10 +89,9 @@ resource "azurerm_virtual_machine" "dbvm" {
      managed_disk_type = "Standard_LRS"
    }
 
-   
    os_profile {
   
-  computer_name  = "appvm${count.index}"
+  computer_name_prefix  = "appvm"
   admin_username = var.linux_admin_username
   admin_password = random_password.linux-vm-password.result
    }
