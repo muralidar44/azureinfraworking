@@ -78,3 +78,7 @@ resource "azurerm_lb_probe" "lbprobe" {
   port                = 8080
 }
 
+
+output "applb" {
+  value = azurerm_lb.mediapplb
+}
