@@ -10,7 +10,7 @@ resource "random_password" "linux-vm-password" {
 }
 
 resource "azurerm_availability_set" "mediaavset" {
-   name                         = [var.mediaavsetname]
+   name                         = var.mediaavsetname
    location                     = azurerm_resource_group.mediarg.location
    resource_group_name          = azurerm_resource_group.mediarg.name
    platform_fault_domain_count  = 2
@@ -25,7 +25,7 @@ resource "azurerm_availability_set" "mediaavset" {
    availability_set_id   = azurerm_availability_set.mediaavset.id
    resource_group_name   = azurerm_resource_group.mediarg.name
    network_interface_ids = [element(azurerm_network_interface.webvmnics.*.id, count.index)]
-   vm_size               = [var.vmsku]
+   vm_size               = var.vmsku
 
    # Uncomment this line to delete the OS disk automatically when deleting the VM
    delete_os_disk_on_termination = true
