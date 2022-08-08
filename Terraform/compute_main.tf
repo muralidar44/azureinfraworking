@@ -1,3 +1,7 @@
+ resource "azurerm_resource_group" "mediarg" {
+   name     = "mediarg"
+   location = "West US 2"
+ }
 # Generate random password
 resource "random_password" "linux-vm-password" {
   length           = 16
