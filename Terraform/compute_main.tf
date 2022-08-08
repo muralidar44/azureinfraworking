@@ -125,6 +125,6 @@ output "appvmss" {
   value = azurerm_virtual_machine_scale_set.appvmss
 }
 
-output "principal_id" {
-  value = azurerm_virtual_machine_scale_set.example.identity[0]["principal_id"]
+output "applb" {
+  value = azurerm_lb.mediapplb
 }
