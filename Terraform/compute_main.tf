@@ -116,3 +116,15 @@ network_profile {
      environment = "staging"
    }
  }
+
+ output "dbvm" {
+  value = azurerm_virtual_machine.dbvm
+}
+
+output "appvmss" {
+  value = azurerm_virtual_machine_scale_set.appvmss
+}
+
+output "principal_id" {
+  value = azurerm_virtual_machine_scale_set.example.identity[0]["principal_id"]
+}
