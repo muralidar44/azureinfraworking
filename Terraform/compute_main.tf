@@ -1,4 +1,4 @@
- resource "azurerm_resource_group" "mediarg" {
+data "azurerm_resource_group" "mediarg" {
    name     = "mediarg"
    location = "West US 2"
  }
