@@ -38,6 +38,26 @@ resource "azurerm_public_ip" "lbpublicip" {
    name                = "$(var.lbbackendpoolname)"
  }
 
+ resource "azurerm_lb_nat_pool" "lbnatpool" {
+  resource_group_name            = azurerm_resource_group.mediarg.name
+  name                           = "ssh"
+  loadbalancer_id                = azurerm_lb.medialb.id
+  protocol                       = "Tcp"
+  frontend_port_start            = 50000
+  frontend_port_end              = 50119
+  backend_port                   = 22
+  frontend_ip_configuration_name = "frontpubip"
+}
+
+resource "azurerm_lb_probe" "example" {
+  resource_group_name = azurerm_resource_group.mediarg.name
+  loadbalancer_id     = azurerm_lb.medialb.id
+  name                = "http-probe"
+  protocol            = "Http"
+  request_path        = "/health"
+  port                = 8080
+}
+
  resource "azurerm_network_interface" "webvmnics" {
    count               = 2
    name                = "webnic${count.index}"
